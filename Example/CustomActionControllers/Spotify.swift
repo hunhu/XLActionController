@@ -71,6 +71,7 @@ open class SpotifyHeaderView: UICollectionReusableView {
     
     open lazy var imageView: UIImageView = {
         let imageView = UIImageView(frame: CGRect.zero)
+        imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(named: "sp-header-icon")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -78,7 +79,7 @@ open class SpotifyHeaderView: UICollectionReusableView {
     
     open lazy var title: UILabel = {
         let title = UILabel(frame: CGRect.zero)
-        title.font = UIFont(name: "HelveticaNeue-Bold", size: 18)
+        title.font = UIFont(name: "Avenir-Medium", size: 18)
         title.text = "The Fast And ... The Furious Soundtrack Collection"
         title.textColor = UIColor.white
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -88,7 +89,7 @@ open class SpotifyHeaderView: UICollectionReusableView {
     
     open lazy var artist: UILabel = {
         let discArtist = UILabel(frame: CGRect.zero)
-        discArtist.font = UIFont(name: "HelveticaNeue", size: 16)
+        discArtist.font = UIFont(name: "Avenir-Light", size: 16)
         discArtist.text = "Various..."
         discArtist.textColor = UIColor.white.withAlphaComponent(0.8)
         discArtist.translatesAutoresizingMaskIntoConstraints = false
@@ -142,6 +143,7 @@ open class SpotifyActionController: ActionController<SpotifyCell, ActionData, Sp
     fileprivate lazy var blurView: UIVisualEffectView = {
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        blurView.alpha = 0.0
         return blurView
     }()
     
@@ -164,11 +166,14 @@ open class SpotifyActionController: ActionController<SpotifyCell, ActionData, Sp
     public override init(nibName nibNameOrNil: String? = nil, bundle nibBundleOrNil: Bundle? = nil) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         settings.behavior.bounces = true
-        settings.behavior.scrollEnabled = true
+        settings.behavior.scrollEnabled = false
         settings.cancelView.showCancel = true
+        settings.animation.present.duration = 0.2
+        settings.animation.present.springVelocity = 1.1
+        settings.animation.dismiss.duration = 0.2
+        settings.animation.dismiss.springVelocity = 1.1
         settings.animation.scale = nil
-        settings.animation.present.springVelocity = 0.0
-        settings.cancelView.hideCollectionViewBehindCancelView = true
+        settings.cancelView.hideCollectionViewBehindCancelView = false
         
         cellSpec = .nibFile(nibName: "SpotifyCell", bundle: Bundle(for: SpotifyCell.self), height: { _ in 60 })
         headerSpec = .cellClass( height: { _ in 84 })
@@ -188,9 +193,16 @@ open class SpotifyActionController: ActionController<SpotifyCell, ActionData, Sp
     required public init?(coder aDecoder: NSCoder) {
       super.init(coder: aDecoder)
     }
-    
+
+    open override func performCustomPresentationAnimation(_ presentedView: UIView, presentingView: UIView) {
+        super.performCustomPresentationAnimation(presentedView, presentingView: presentingView)
+        blurView.alpha = 0.93
+    }
+  
     open override func performCustomDismissingAnimation(_ presentedView: UIView, presentingView: UIView) {
         super.performCustomDismissingAnimation(presentedView, presentingView: presentingView)
+        blurView.alpha = 0.0
+        cancelView?.alpha = 0.0
         cancelView?.frame.origin.y = view.bounds.size.height + 10
     }
     
