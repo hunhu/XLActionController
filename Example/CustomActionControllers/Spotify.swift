@@ -168,9 +168,9 @@ open class SpotifyActionController: ActionController<SpotifyCell, ActionData, Sp
         settings.behavior.bounces = true
         settings.behavior.scrollEnabled = false
         settings.cancelView.showCancel = true
-        settings.animation.present.duration = 0.2
+        settings.animation.present.duration = 0.28
         settings.animation.present.springVelocity = 1.1
-        settings.animation.dismiss.duration = 0.2
+        settings.animation.dismiss.duration = 0.28
         settings.animation.dismiss.springVelocity = 1.1
         settings.animation.scale = nil
         settings.cancelView.hideCollectionViewBehindCancelView = false
@@ -196,7 +196,7 @@ open class SpotifyActionController: ActionController<SpotifyCell, ActionData, Sp
 
     open override func performCustomPresentationAnimation(_ presentedView: UIView, presentingView: UIView) {
         super.performCustomPresentationAnimation(presentedView, presentingView: presentingView)
-        blurView.alpha = 0.93
+        blurView.alpha = 0.95
     }
   
     open override func performCustomDismissingAnimation(_ presentedView: UIView, presentingView: UIView) {
